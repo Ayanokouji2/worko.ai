@@ -1,9 +1,8 @@
+import 'dotenv/config';
 import connectDB from "./db/connection";
-import 'dotenv/config'
 
 
 const PORT : number = 5000 || process.env.PORT 
-
 connectDB()
     .then(() => {
         app.on('error', (error : any) =>{
