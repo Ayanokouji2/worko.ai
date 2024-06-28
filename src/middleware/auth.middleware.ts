@@ -6,18 +6,16 @@ interface UserRequest extends Request{
 }
 
 const authenticate = (req: UserRequest, res: Response, next: NextFunction): void => {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
+    const token  = req.header('Authorization')?.replace('Bearer ', '') as string;
     if (!token) {
         res.status(401).send({ error: 'Access denied. No token provided.' });
-        return;
     }
-
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
         req.user = decoded;
         next();
-    } catch (ex) {
-        res.status(400).send({ error: 'Invalid token.' });
+    } catch (ex : unknown) {
+        res.status(400).send({ error: 'Invalid token.'+(ex as Error).message });
     }
 };
 
